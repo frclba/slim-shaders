@@ -8,6 +8,7 @@ edition = "2021"
 
 [dependencies]
 cargo-watch = "8.5.2"
+cgmath = "0.18.0"
 env_logger = "0.10.1"
 gl = "0.14.0"
 glfw = "0.54.0"
