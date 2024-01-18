@@ -13,7 +13,7 @@ fn main() {
     window.init_gl();
 
     let rectangle_vertices: [f32; 12] = [
-        0.2, 0.2, 0.0, 0.2, -0.2, 0.0, -0.2, -0.2, 0.0, -0.2, 0.2, 0.0,
+        0.3, 0.3, 0.0, 0.3, -0.3, 0.0, -0.3, -0.3, 0.0, -0.3, 0.3, 0.0,
     ];
 
     let rectangle_indices: [i32; 6] = [0, 1, 3, 1, 2, 3];
@@ -24,13 +24,12 @@ fn main() {
         0.0, -0.5, 0.0, // Top
     ];
 
-    let rectangle_vao = create_vao(&rectangle_vertices, Some(&rectangle_indices));
-
     create_vertex_attribute(1, 3);
     create_vertex_attribute(2, 3);
+    let rectangle_vao = create_vao(&rectangle_vertices, Some(&rectangle_indices));
 
-    let triangle_vao = create_vao(&triangle_vertices, None);
     create_vertex_attribute(0, 3);
+    let triangle_vao = create_vao(&triangle_vertices, None);
 
     while !window.should_close() {
         unsafe {
@@ -58,7 +57,7 @@ fn create_vao(vertices: &[f32], indices: Option<&[i32]>) -> engine::graphics::gl
         ibo.bind();
         ibo.store_i32_data(indices);
     }
-
+    vao.unbind();
     vao
 }
 
@@ -82,8 +81,9 @@ fn render_shapes(vao: &engine::graphics::gl_wrapper::Vao, has_ibo: bool) {
     unsafe {
         if has_ibo {
             gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, ptr::null());
-            return;
+        } else {
+            gl::DrawArrays(gl::TRIANGLES, 0, 3);
         }
-        gl::DrawArrays(gl::TRIANGLES, 0, 3);
     }
+    vao.unbind();
 }
